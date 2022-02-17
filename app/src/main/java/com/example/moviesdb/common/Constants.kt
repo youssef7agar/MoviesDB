@@ -1,4 +1,4 @@
-package com.example.moviesdb
+package com.example.moviesdb.common
 
 class Constants {
 
@@ -16,5 +16,9 @@ class Constants {
         const val SIMILAR_MOVIES_ENDPOINT = "movie/{movie_id}/similar?api_key=$API_KEY"
 
         const val MOVIE_CREDITS_ENDPOINT = "movie/{movie_id}/credits?api_key=$API_KEY"
+
+        const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w200"
+
+        const val PAGINATION_START = 1
     }
 }

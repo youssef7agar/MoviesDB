@@ -1,6 +1,6 @@
 package com.example.moviesdb.di.module
 
-import com.example.moviesdb.Constants.Companion.BASE_URL
+import com.example.moviesdb.common.Constants.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
