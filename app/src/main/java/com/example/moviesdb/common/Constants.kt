@@ -9,7 +9,7 @@ class Constants {
 
         const val POPULAR_MOVIES_ENDPOINT = "movie/popular?api_key=$API_KEY"
 
-        const val SEARCH_MOVIES_ENDPOINT = "search/company?api_key=$API_KEY"
+        const val SEARCH_MOVIES_ENDPOINT = "search/movie?api_key=$API_KEY"
 
         const val MOVIE_DETAILS_ENDPOINT = "movie/{movie_id}?api_key=$API_KEY"
 
