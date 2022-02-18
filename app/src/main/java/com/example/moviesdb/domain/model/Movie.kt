@@ -1,7 +1,8 @@
 package com.example.moviesdb.domain.model
 
-data class Movie (
+data class Movie(
+    val id: Long,
     val title: String,
     val poster: String,
-    val overview: String
-        )
+    val year: String
+)
