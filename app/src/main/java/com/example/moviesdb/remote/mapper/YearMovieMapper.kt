@@ -15,7 +15,7 @@ class YearMovieMapper @Inject constructor() {
             .map {
                 YearMovie(
                     year = it.key,
-                    movies = it.value.map(::mapMovie)
+                    movies = it.value.map(::mapMovie).toMutableList()
                 )
             }
     }
