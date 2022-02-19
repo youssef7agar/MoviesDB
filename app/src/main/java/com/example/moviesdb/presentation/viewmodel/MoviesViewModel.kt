@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.example.moviesdb.common.Event
 import com.example.moviesdb.domain.model.YearMovie
 import com.example.moviesdb.domain.usecase.GetPopularMoviesUseCase
+import com.example.moviesdb.domain.usecase.SearchMoviesUseCase
 import com.example.moviesdb.presentation.mapper.YearMovieUiMapper
 import com.example.moviesdb.presentation.viewstate.MoviesViewEvent
 import com.example.moviesdb.presentation.viewstate.MoviesViewState
@@ -20,6 +21,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MoviesViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
+    private val searchMoviesUseCase: SearchMoviesUseCase,
     private val yearMovieUiMapper: YearMovieUiMapper
 ) : ViewModel(), CoroutineScope {
 
@@ -43,6 +45,7 @@ class MoviesViewModel @Inject constructor(
     }
 
     fun getPopularMovies() = launch {
+        movies.clear()
         _viewState.postValue(MoviesViewState.Loading)
         when (val result = getPopularMoviesUseCase()) {
             is GetPopularMoviesUseCase.Result.Success -> {
@@ -76,6 +79,30 @@ class MoviesViewModel @Inject constructor(
                 _viewEvent.postValue(Event(MoviesViewEvent.Error))
                 Timber.w(result.throwable)
             }
+        }
+    }
+
+    fun search(query: String) = launch {
+        _viewState.postValue(MoviesViewState.Loading)
+        if (query.isNotEmpty()) {
+            movies.clear()
+            when (val result = searchMoviesUseCase(query)) {
+                is SearchMoviesUseCase.Result.Success -> {
+                    updateMoviesList(newList = result.movieResult.results)
+                    _viewState.postValue(
+                        MoviesViewState.Success(
+                            movies = movies.map(yearMovieUiMapper::map)
+                        )
+                    )
+                }
+                is SearchMoviesUseCase.Result.Error -> {
+                    Timber.w(result.throwable)
+                    _viewState.postValue(MoviesViewState.Error)
+                    _viewEvent.postValue(Event(MoviesViewEvent.Error))
+                }
+            }
+        } else {
+            getPopularMovies()
         }
     }
 

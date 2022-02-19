@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.AbsListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesdb.MyApplication
+import com.example.moviesdb.common.hideKeyboard
 import com.example.moviesdb.databinding.FragmentMoviesBinding
 import com.example.moviesdb.di.ViewModelProviderFactory
 import com.example.moviesdb.presentation.adapter.YearMoviesAdapter
@@ -49,29 +52,57 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tryAgainButton.setOnClickListener { viewModel.getPopularMovies() }
+        binding.tryAgainButton.setOnClickListener {
+            if (binding.searchEditText.text.isEmpty())
+                viewModel.getPopularMovies()
+            else
+                viewModel.search(binding.searchEditText.text.toString())
+        }
 
         setUpRecyclerView()
         handleViewState()
         handleViewEvent()
+
+        binding.searchEditText.setOnEditorActionListener(TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                requireActivity().hideKeyboard()
+                viewModel.search(binding.searchEditText.text.toString())
+                return@OnEditorActionListener true
+            }
+            false
+        })
+
+        binding.searchImage.setOnClickListener {
+            requireActivity().hideKeyboard()
+            viewModel.search(binding.searchEditText.text.toString())
+        }
     }
 
     private fun handleViewState() {
         viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
             when (viewState) {
                 MoviesViewState.Error -> {
+                    binding.yearMoviesRecyclerView.visibility = View.GONE
                     binding.tryAgainButton.visibility = View.VISIBLE
+                    binding.loadingProgressBar.visibility = View.GONE
+                    binding.loadMoreProgressBar.visibility = View.GONE
                 }
                 MoviesViewState.Loading -> {
+                    binding.yearMoviesRecyclerView.visibility = View.GONE
                     binding.tryAgainButton.visibility = View.GONE
                     binding.loadingProgressBar.visibility = View.VISIBLE
+                    binding.loadMoreProgressBar.visibility = View.GONE
                 }
                 MoviesViewState.NoInternet -> {
+                    binding.yearMoviesRecyclerView.visibility = View.GONE
                     binding.tryAgainButton.visibility = View.VISIBLE
+                    binding.loadingProgressBar.visibility = View.GONE
+                    binding.loadMoreProgressBar.visibility = View.GONE
                 }
                 is MoviesViewState.Success -> {
                     binding.tryAgainButton.visibility = View.GONE
                     binding.loadingProgressBar.visibility = View.GONE
+                    binding.yearMoviesRecyclerView.visibility = View.VISIBLE
                     adapter.submitList(viewState.movies)
                     binding.loadMoreProgressBar.isVisible = viewState.loadingMore
                 }
@@ -124,7 +155,8 @@ class MoviesFragment : Fragment() {
             val shouldPaginate = isAtLastItem && isNotAtBeginning && isScrolling
 
             if (shouldPaginate) {
-                viewModel.nextPage()
+                if (binding.searchEditText.text.toString().isEmpty())
+                    viewModel.nextPage()
                 isScrolling = false
             }
         }

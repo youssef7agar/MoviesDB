@@ -19,4 +19,12 @@ class MoviesRepository @Inject constructor(
             Result.Error(e)
         }
     }
+
+    suspend fun searchMovies(query: String): Result<MovieResult> {
+        return try {
+            Result.Success(movieResultMapper.map(api.searchMovies(query)))
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
 }
