@@ -17,7 +17,7 @@ class Constants {
 
         const val MOVIE_CREDITS_ENDPOINT = "movie/{movie_id}/credits?api_key=$API_KEY"
 
-        const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w200"
+        const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 
         const val PAGINATION_START = 1
     }
