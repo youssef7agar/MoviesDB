@@ -1,18 +1,28 @@
 package com.example.moviesdb.remote.mapper
 
 import com.example.moviesdb.domain.model.MovieResult
+import com.example.moviesdb.domain.model.Movies
 import com.example.moviesdb.remote.model.MovieResultRemote
 import javax.inject.Inject
 
 class MovieResultMapper @Inject constructor(
-    private val yearMovieMapper: YearMovieMapper
+    private val yearMovieMapper: YearMovieMapper,
+    private val movieMapper: MovieMapper
 ) {
 
-    fun map(movieResultRemote: MovieResultRemote): MovieResult {
+    fun mapYearMovie(movieResultRemote: MovieResultRemote): MovieResult {
         assertEssentialParams(movieResultRemote)
 
         return MovieResult(
             results = yearMovieMapper.map(movieResultRemote.results!!)
+        )
+    }
+
+    fun mapMovie(movieResultRemote: MovieResultRemote): Movies {
+        assertEssentialParams(movieResultRemote)
+
+        return Movies(
+            movies = movieResultRemote.results!!.map(movieMapper::map)
         )
     }
 
