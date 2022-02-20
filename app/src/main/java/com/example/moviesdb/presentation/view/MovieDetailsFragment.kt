@@ -13,8 +13,10 @@ import com.example.moviesdb.MyApplication
 import com.example.moviesdb.R
 import com.example.moviesdb.databinding.FragmentMovieDetailsBinding
 import com.example.moviesdb.di.ViewModelProviderFactory
+import com.example.moviesdb.presentation.adapter.MemberAdapter
 import com.example.moviesdb.presentation.adapter.MoviesAdapter
 import com.example.moviesdb.presentation.viewmodel.MovieDetailsViewModel
+import com.example.moviesdb.presentation.viewstate.CreditsViewState
 import com.example.moviesdb.presentation.viewstate.DetailsViewState
 import com.example.moviesdb.presentation.viewstate.SimilarMoviesViewState
 import javax.inject.Inject
@@ -30,6 +32,8 @@ class MovieDetailsFragment : Fragment() {
     private val viewModel: MovieDetailsViewModel by viewModels { viewModelFactory }
 
     private lateinit var similarMoviesAdapter: MoviesAdapter
+    private lateinit var actorsAdapter: MemberAdapter
+    private lateinit var directorsAdapter: MemberAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -48,14 +52,22 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        similarMoviesAdapter = MoviesAdapter { }
+        similarMoviesAdapter = MoviesAdapter {}
         binding.similarMoviesRecyclerView.adapter = similarMoviesAdapter
+
+        actorsAdapter = MemberAdapter()
+        binding.actorsRecyclerView.adapter = actorsAdapter
+
+        directorsAdapter = MemberAdapter()
+        binding.directorsRecyclerView.adapter = directorsAdapter
 
         viewModel.getMovieDetails(movieId = args.movieId)
         viewModel.getSimilarMovies(movieId = args.movieId)
+        viewModel.getCredits(movieId = args.movieId)
 
         handleDetailsViewState()
         handleSimilarMoviesViewState()
+        handleCreditsViewState()
     }
 
     private fun handleDetailsViewState() {
@@ -126,6 +138,33 @@ class MovieDetailsFragment : Fragment() {
                     binding.similarMoviesRecyclerView.visibility = View.VISIBLE
 
                     similarMoviesAdapter.submitList(viewState.movies)
+                }
+            }
+        }
+    }
+
+    private fun handleCreditsViewState() {
+        viewModel.creditsViewState.observe(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                CreditsViewState.Error -> {
+                    binding.creditsTryAgainButton.visibility = View.VISIBLE
+                    binding.creditsLoadingProgressBar.visibility = View.GONE
+                    binding.creditsGroup.visibility = View.GONE
+                }
+                CreditsViewState.Loading -> {
+                    binding.creditsTryAgainButton.visibility = View.GONE
+                    binding.creditsLoadingProgressBar.visibility = View.VISIBLE
+                    binding.creditsGroup.visibility = View.GONE
+                }
+                CreditsViewState.NoInternet -> {
+                }
+                is CreditsViewState.Success -> {
+                    binding.creditsTryAgainButton.visibility = View.GONE
+                    binding.creditsLoadingProgressBar.visibility = View.GONE
+                    binding.creditsGroup.visibility = View.VISIBLE
+
+                    actorsAdapter.submitList(viewState.actors)
+                    directorsAdapter.submitList(viewState.directors)
                 }
             }
         }

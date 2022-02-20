@@ -8,4 +8,6 @@
     <string name="status">Status: %s</string>
     <string name="revenue">Revenue: %s</string>
     <string name="similar_movies">Similar movies:</string>
+    <string name="actors">Actors:</string>
+    <string name="directors">Directors:</string>
 </resources>

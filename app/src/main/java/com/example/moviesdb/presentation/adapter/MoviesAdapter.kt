@@ -30,7 +30,7 @@ class MoviesAdapter(
         fun bind(movie: MovieUiModel) {
             Glide.with(binding.root.context)
                 .load(movie.poster)
-                .fallback(R.drawable.default_image)
+                .error(R.drawable.default_image)
                 .into(binding.posterImageView)
             binding.posterNameTextView.text = movie.title
 

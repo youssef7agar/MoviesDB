@@ -1,7 +1,6 @@
 package com.example.moviesdb.presentation.viewstate
 
 import com.example.moviesdb.presentation.model.MovieDetailsUiModel
-import com.example.moviesdb.presentation.model.MovieUiModel
 
 sealed class DetailsViewState{
 

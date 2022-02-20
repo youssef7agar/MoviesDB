@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
-        android:id="@+id/posterImageView"
+        android:id="@+id/memberPhotoImageView"
         android:layout_width="140dp"
         android:layout_height="200dp"
         tools:src="@drawable/ic_launcher_background"
@@ -17,7 +17,7 @@
         tools:ignore="ContentDescription" />
 
     <TextView
-        android:id="@+id/posterNameTextView"
+        android:id="@+id/memberNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -25,9 +25,9 @@
         android:textSize="16sp"
         android:background="#55000000"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="@+id/posterImageView"
-        app:layout_constraintEnd_toEndOf="@+id/posterImageView"
-        app:layout_constraintBottom_toBottomOf="@+id/posterImageView"
-        tools:text="Movie Name"/>
+        app:layout_constraintStart_toStartOf="@+id/memberPhotoImageView"
+        app:layout_constraintEnd_toEndOf="@+id/memberPhotoImageView"
+        app:layout_constraintBottom_toBottomOf="@+id/memberPhotoImageView"
+        tools:text="Member Name"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

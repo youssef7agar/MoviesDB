@@ -26,12 +26,10 @@ class GetCreditsUseCase @Inject constructor(
                     Result.Error(exception)
                 })
             }
-            actorsList.sortedBy { castMember -> castMember.popularity }.take(5)
-            directorsList.sortedBy { crewMember -> crewMember.popularity }.take(5)
             Result.Success(
                 credits = Credits(
-                    cast = actorsList,
-                    crew = directorsList
+                    cast = actorsList.sortedBy { castMember -> castMember.popularity }.take(5),
+                    crew = directorsList.sortedBy { crewMember -> crewMember.popularity }.take(5)
                 )
             )
         }, { exception ->

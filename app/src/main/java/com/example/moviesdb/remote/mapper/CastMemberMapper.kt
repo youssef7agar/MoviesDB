@@ -11,6 +11,7 @@ class CastMemberMapper @Inject constructor() {
         assertEssentialParams(remote)
 
         return Member(
+            id = remote.id!!,
             name = remote.name!!,
             department = remote.department!!,
             photo = BASE_IMAGE_URL + remote.photo,
@@ -20,6 +21,9 @@ class CastMemberMapper @Inject constructor() {
 
     private fun assertEssentialParams(remote: CastMemberRemote) {
         when {
+            remote.id == null -> {
+                throw RuntimeException("The params: castMemberRemote.id is missing in received object: $remote")
+            }
             remote.name == null -> {
                 throw RuntimeException("The params: castMemberRemote.name is missing in received object: $remote")
             }
