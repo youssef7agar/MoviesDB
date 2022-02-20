@@ -13,8 +13,10 @@ import com.example.moviesdb.MyApplication
 import com.example.moviesdb.R
 import com.example.moviesdb.databinding.FragmentMovieDetailsBinding
 import com.example.moviesdb.di.ViewModelProviderFactory
+import com.example.moviesdb.presentation.adapter.MoviesAdapter
 import com.example.moviesdb.presentation.viewmodel.MovieDetailsViewModel
 import com.example.moviesdb.presentation.viewstate.DetailsViewState
+import com.example.moviesdb.presentation.viewstate.SimilarMoviesViewState
 import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
@@ -26,6 +28,8 @@ class MovieDetailsFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProviderFactory
     private val viewModel: MovieDetailsViewModel by viewModels { viewModelFactory }
+
+    private lateinit var similarMoviesAdapter: MoviesAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,28 +48,34 @@ class MovieDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        similarMoviesAdapter = MoviesAdapter { }
+        binding.similarMoviesRecyclerView.adapter = similarMoviesAdapter
+
         viewModel.getMovieDetails(movieId = args.movieId)
+        viewModel.getSimilarMovies(movieId = args.movieId)
+
         handleDetailsViewState()
+        handleSimilarMoviesViewState()
     }
 
     private fun handleDetailsViewState() {
-        viewModel.viewState.observe(viewLifecycleOwner) { viewState ->
+        viewModel.detailsViewState.observe(viewLifecycleOwner) { viewState ->
             when (viewState) {
                 DetailsViewState.Error -> {
-                    binding.loadingProgressBar.visibility = View.GONE
-                    binding.tryAgainButton.visibility = View.VISIBLE
+                    binding.detailsLoadingProgressBar.visibility = View.GONE
+                    binding.detailsTryAgainButton.visibility = View.VISIBLE
                     binding.detailsGroup.visibility = View.GONE
                 }
                 DetailsViewState.Loading -> {
-                    binding.loadingProgressBar.visibility = View.VISIBLE
-                    binding.tryAgainButton.visibility = View.GONE
+                    binding.detailsLoadingProgressBar.visibility = View.VISIBLE
+                    binding.detailsTryAgainButton.visibility = View.GONE
                     binding.detailsGroup.visibility = View.GONE
                 }
                 DetailsViewState.NoInternet -> {
                 }
                 is DetailsViewState.Success -> {
-                    binding.loadingProgressBar.visibility = View.GONE
-                    binding.tryAgainButton.visibility = View.GONE
+                    binding.detailsLoadingProgressBar.visibility = View.GONE
+                    binding.detailsTryAgainButton.visibility = View.GONE
                     binding.detailsGroup.visibility = View.VISIBLE
 
                     Glide.with(requireContext())
@@ -90,6 +100,32 @@ class MovieDetailsFragment : Fragment() {
                         getString(R.string.revenue),
                         viewState.movieDetails.revenue
                     )
+                }
+            }
+        }
+    }
+
+    private fun handleSimilarMoviesViewState() {
+        viewModel.similarMoviesViewState.observe(viewLifecycleOwner) { viewState ->
+            when (viewState) {
+                SimilarMoviesViewState.Error -> {
+                    binding.similarTryAgainButton.visibility = View.VISIBLE
+                    binding.similarLoadingProgressBar.visibility = View.GONE
+                    binding.similarMoviesRecyclerView.visibility = View.GONE
+                }
+                SimilarMoviesViewState.Loading -> {
+                    binding.similarTryAgainButton.visibility = View.GONE
+                    binding.similarLoadingProgressBar.visibility = View.VISIBLE
+                    binding.similarMoviesRecyclerView.visibility = View.GONE
+                }
+                SimilarMoviesViewState.NoInternet -> {
+                }
+                is SimilarMoviesViewState.Success -> {
+                    binding.similarTryAgainButton.visibility = View.GONE
+                    binding.similarLoadingProgressBar.visibility = View.GONE
+                    binding.similarMoviesRecyclerView.visibility = View.VISIBLE
+
+                    similarMoviesAdapter.submitList(viewState.movies)
                 }
             }
         }
