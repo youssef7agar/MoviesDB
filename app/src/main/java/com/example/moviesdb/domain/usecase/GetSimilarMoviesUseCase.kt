@@ -12,9 +12,7 @@ class GetSimilarMoviesUseCase @Inject constructor(
     suspend operator fun invoke(movieId: Long): Result {
 
         return repo.getSimilarMovies(movieId).unwrapResult({ movieResult ->
-            Result.Success(movies = movieResult.apply {
-                this.movies.take(5)
-            })
+            Result.Success(movies = movieResult)
         }, { exception ->
             Result.Error(exception)
         })

@@ -64,7 +64,7 @@ class MovieDetailsViewModel @Inject constructor(
             is GetSimilarMoviesUseCase.Result.Success -> {
                 _similarMoviesViewState.postValue(
                     SimilarMoviesViewState.Success(
-                        result.movies.movies.map(
+                        result.movies.movies.take(5).map(
                             movieUiMapper::map
                         )
                     )
