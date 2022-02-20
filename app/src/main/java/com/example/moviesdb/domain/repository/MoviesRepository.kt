@@ -1,6 +1,7 @@
 package com.example.moviesdb.domain.repository
 
 import com.example.moviesdb.common.Result
+import com.example.moviesdb.common.tryCall
 import com.example.moviesdb.domain.model.Credits
 import com.example.moviesdb.domain.model.MovieDetails
 import com.example.moviesdb.domain.model.MovieResult
@@ -9,7 +10,6 @@ import com.example.moviesdb.remote.api.MoviesApiService
 import com.example.moviesdb.remote.mapper.CreditsMapper
 import com.example.moviesdb.remote.mapper.MovieDetailsMapper
 import com.example.moviesdb.remote.mapper.MovieResultMapper
-import java.lang.Exception
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
@@ -20,42 +20,32 @@ class MoviesRepository @Inject constructor(
 ) {
 
     suspend fun getPopularMovies(page: Int): Result<MovieResult> {
-        return try {
+        return tryCall {
             Result.Success(movieResultMapper.mapYearMovie(api.getPopularMovies(page)))
-        } catch (e: Exception) {
-            Result.Error(e)
         }
     }
 
     suspend fun searchMovies(query: String): Result<MovieResult> {
-        return try {
+        return tryCall {
             Result.Success(movieResultMapper.mapYearMovie(api.searchMovies(query)))
-        } catch (e: Exception) {
-            Result.Error(e)
         }
     }
 
     suspend fun getMovieDetails(movieId: Long): Result<MovieDetails> {
-        return try {
+        return tryCall {
             Result.Success(movieDetailsMapper.map(api.getMovieDetails(movieId)))
-        } catch (e: Exception) {
-            Result.Error(e)
         }
     }
 
     suspend fun getSimilarMovies(movieId: Long): Result<Movies> {
-        return try {
+        return tryCall {
             Result.Success(movieResultMapper.mapMovie(api.getSimilarMovies(movieId)))
-        } catch (e: Exception) {
-            Result.Error(e)
         }
     }
 
     suspend fun getMoviesCredits(movieId: Long): Result<Credits> {
-        return try {
+        return tryCall {
             Result.Success(creditsMapper.map(api.getCredits(movieId)))
-        } catch (e: Exception) {
-            Result.Error(e)
         }
     }
 }
