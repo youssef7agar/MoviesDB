@@ -9,10 +9,14 @@ class GetSimilarMoviesUseCase @Inject constructor(
     private val repo: MoviesRepository
 ) {
 
+    private val maximum = 5
+
     suspend operator fun invoke(movieId: Long): Result {
 
         return repo.getSimilarMovies(movieId).unwrapResult({ movieResult ->
-            Result.Success(movies = movieResult)
+            Result.Success(movies = movieResult.copy(
+                movies = movieResult.movies.take(maximum)
+            ))
         }, { exception ->
             Result.Error(exception)
         })
