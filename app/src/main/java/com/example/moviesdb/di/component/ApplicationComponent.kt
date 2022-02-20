@@ -6,6 +6,7 @@ import com.example.moviesdb.MyApplication
 import com.example.moviesdb.di.module.AppModule
 import com.example.moviesdb.di.module.RemoteModule
 import com.example.moviesdb.di.module.ViewModelsModule
+import com.example.moviesdb.presentation.view.MovieDetailsFragment
 import com.example.moviesdb.presentation.view.MoviesFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -26,6 +27,8 @@ interface ApplicationComponent {
     fun inject(activity: MainActivity)
 
     fun inject(fragment: MoviesFragment)
+
+    fun inject(fragment: MovieDetailsFragment)
 
     @Component.Factory
     interface Factory {

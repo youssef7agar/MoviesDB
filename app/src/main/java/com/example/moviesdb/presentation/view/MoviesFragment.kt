@@ -12,6 +12,8 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesdb.MyApplication
@@ -134,7 +136,11 @@ class MoviesFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        adapter = YearMoviesAdapter()
+        adapter = YearMoviesAdapter { movieId ->
+            val action =
+                MoviesFragmentDirections.toMovieDetailsAction(movieId)
+            binding.root.findNavController().navigate(action)
+        }
         binding.apply {
             yearMoviesRecyclerView.adapter = adapter
             yearMoviesRecyclerView.addOnScrollListener(this@MoviesFragment.scrollListener)

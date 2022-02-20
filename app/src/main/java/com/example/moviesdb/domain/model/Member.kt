@@ -1,6 +1,6 @@
 package com.example.moviesdb.domain.model
 
-data class CastMember(
+data class Member(
     val name: String,
     val photo: String,
     val department: String,

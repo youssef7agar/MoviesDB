@@ -7,10 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.moviesdb.databinding.AdapterYearMovieBinding
 import com.example.moviesdb.presentation.model.YearMovieUiModel
 
-class YearMoviesAdapter : ListAdapter<YearMovieUiModel, YearMoviesAdapter.YearMovieViewHolder>(YearMoviesDiffUtil) {
+class YearMoviesAdapter(
+    private val onMovieClicked: (movieId: Long) -> Unit
+) : ListAdapter<YearMovieUiModel, YearMoviesAdapter.YearMovieViewHolder>(YearMoviesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YearMovieViewHolder {
-        val binding = AdapterYearMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            AdapterYearMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return YearMovieViewHolder(binding)
     }
 
@@ -19,8 +22,11 @@ class YearMoviesAdapter : ListAdapter<YearMovieUiModel, YearMoviesAdapter.YearMo
         holder.bind(item)
     }
 
-    inner class YearMovieViewHolder(private val binding: AdapterYearMovieBinding) : RecyclerView.ViewHolder(binding.root) {
-        private val moviesAdapter = MoviesAdapter()
+    inner class YearMovieViewHolder(private val binding: AdapterYearMovieBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        private val moviesAdapter = MoviesAdapter { movieId ->
+            onMovieClicked(movieId)
+        }
 
         fun bind(yearMovieUiModel: YearMovieUiModel) {
             binding.yearTextView.text = yearMovieUiModel.year

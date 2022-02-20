@@ -2,9 +2,8 @@ package com.example.moviesdb.domain.usecase
 
 import com.example.moviesdb.common.unwrapResult
 import com.example.moviesdb.common.unwrapSuspendResult
-import com.example.moviesdb.domain.model.CastMember
+import com.example.moviesdb.domain.model.Member
 import com.example.moviesdb.domain.model.Credits
-import com.example.moviesdb.domain.model.CrewMember
 import com.example.moviesdb.domain.repository.MoviesRepository
 import javax.inject.Inject
 
@@ -12,8 +11,8 @@ class GetCreditsUseCase @Inject constructor(
     private val repo: MoviesRepository
 ) {
 
-    private val actorsList = mutableListOf<CastMember>()
-    private val directorsList = mutableListOf<CrewMember>()
+    private val actorsList = mutableListOf<Member>()
+    private val directorsList = mutableListOf<Member>()
 
     suspend operator fun invoke(movieId: Long): Result {
         return repo.getSimilarMovies(movieId).unwrapSuspendResult({ result ->

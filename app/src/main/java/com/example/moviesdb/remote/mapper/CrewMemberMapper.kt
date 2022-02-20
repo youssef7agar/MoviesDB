@@ -1,16 +1,16 @@
 package com.example.moviesdb.remote.mapper
 
 import com.example.moviesdb.common.Constants.Companion.BASE_IMAGE_URL
-import com.example.moviesdb.domain.model.CrewMember
+import com.example.moviesdb.domain.model.Member
 import com.example.moviesdb.remote.model.CrewMemberRemote
 import javax.inject.Inject
 
 class CrewMemberMapper @Inject constructor() {
 
-    fun map(remote: CrewMemberRemote): CrewMember {
+    fun map(remote: CrewMemberRemote): Member {
         assertEssentialParams(remote)
 
-        return CrewMember(
+        return Member(
             name = remote.name!!,
             photo = BASE_IMAGE_URL + remote.photo!!,
             department = remote.department!!,

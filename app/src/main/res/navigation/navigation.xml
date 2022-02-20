@@ -8,6 +8,23 @@
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.moviesdb.presentation.view.MoviesFragment"
-        tools:layout="@layout/fragment_movies"/>
+        tools:layout="@layout/fragment_movies">
+        <action
+            android:id="@+id/toMovieDetailsAction"
+            app:destination="@id/movieDetailsFragment">
+            <argument
+                android:name="movieId"
+                app:argType="long" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/movieDetailsFragment"
+        android:name="com.example.moviesdb.presentation.view.MovieDetailsFragment"
+        tools:layout="@layout/fragment_movie_details">
+        <argument
+            android:name="movieId"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

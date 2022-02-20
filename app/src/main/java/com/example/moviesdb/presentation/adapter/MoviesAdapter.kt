@@ -9,7 +9,9 @@ import com.example.moviesdb.R
 import com.example.moviesdb.databinding.AdapterMovieBinding
 import com.example.moviesdb.presentation.model.MovieUiModel
 
-class MoviesAdapter : ListAdapter<MovieUiModel, MoviesAdapter.MovieViewHolder>(MoviesDiffUtil) {
+class MoviesAdapter(
+    private val onMovieClicked: (moviedId: Long) -> Unit
+) : ListAdapter<MovieUiModel, MoviesAdapter.MovieViewHolder>(MoviesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         val binding =
@@ -31,6 +33,8 @@ class MoviesAdapter : ListAdapter<MovieUiModel, MoviesAdapter.MovieViewHolder>(M
                 .fallback(R.drawable.default_image)
                 .into(binding.posterImageView)
             binding.posterNameTextView.text = movie.title
+
+            binding.root.setOnClickListener { onMovieClicked(movie.id) }
         }
     }
 }
