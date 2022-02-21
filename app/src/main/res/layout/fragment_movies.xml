@@ -61,7 +61,7 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/loadMoreProgressBar"
         app:layout_constraintTop_toBottomOf="@id/space"
-        tools:listitem="@layout/adapter_year_movie" />
+        tools:listitem="@layout/adapter_movie_overview" />
 
     <ProgressBar
         android:id="@+id/loadMoreProgressBar"

@@ -14,7 +14,8 @@ class MovieMapper @Inject constructor() {
             id = remote.id!!,
             poster = BASE_IMAGE_URL + remote.poster,
             year = remote.releaseDate!!,
-            title = remote.title!!
+            title = remote.title!!,
+            overview = remote.overview ?: ""
         )
     }
 

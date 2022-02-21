@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.moviesdb.databinding.AdapterYearMovieBinding
 import com.example.moviesdb.presentation.model.YearMovieUiModel
 
@@ -24,7 +25,7 @@ class YearMoviesAdapter(
 
     inner class YearMovieViewHolder(private val binding: AdapterYearMovieBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private val moviesAdapter = MoviesAdapter { movieId ->
+        private val moviesAdapter = MovieOverviewAdapter { movieId ->
             onMovieClicked(movieId)
         }
 
@@ -32,6 +33,9 @@ class YearMoviesAdapter(
             binding.yearTextView.text = yearMovieUiModel.year
             binding.moviesRecyclerView.adapter = moviesAdapter
             moviesAdapter.submitList(yearMovieUiModel.movies)
+
+            (binding.moviesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+                false
         }
     }
 }

@@ -6,13 +6,15 @@ import javax.inject.Inject
 
 class MovieUiMapper @Inject constructor() {
 
-    fun map(movie: Movie): MovieUiModel {
+    fun map(movie: Movie, watchlist: List<Long>): MovieUiModel {
 
         return MovieUiModel(
             id = movie.id,
             title = movie.title,
             poster = movie.poster,
-            year = movie.year
+            year = movie.year,
+            overview = movie.overview,
+            inWatchlist = watchlist.contains(movie.id)
         )
     }
 }

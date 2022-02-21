@@ -10,7 +10,7 @@ import com.example.moviesdb.databinding.AdapterMovieBinding
 import com.example.moviesdb.presentation.model.MovieUiModel
 
 class MoviesAdapter(
-    private val onMovieClicked: (moviedId: Long) -> Unit
+    private val onMovieClicked: (movieId: Long) -> Unit
 ) : ListAdapter<MovieUiModel, MoviesAdapter.MovieViewHolder>(MoviesDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {

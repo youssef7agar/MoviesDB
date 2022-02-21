@@ -90,9 +90,9 @@ class MovieDetailsViewModel @Inject constructor(
                 similarIds = result.movies.movies.map { it.id }
                 _similarMoviesViewState.postValue(
                     SimilarMoviesViewState.Success(
-                        result.movies.movies.map(
-                            movieUiMapper::map
-                        )
+                        result.movies.movies.map { movie ->
+                            movieUiMapper.map(movie, watchlist)
+                        }
                     )
                 )
             }

@@ -98,7 +98,7 @@
                     android:id="@+id/detailsGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="backdropImageView, movieTitleTextView, movieOverviewTextView, statusTextView, releaseDateTextView, revenueTextView" />
+                    app:constraint_referenced_ids="backdropImageView, movieTitleTextView, movieOverviewTextView, statusTextView, releaseDateTextView, revenueTextView, watchListButton" />
 
                 <ProgressBar
                     android:id="@+id/detailsLoadingProgressBar"

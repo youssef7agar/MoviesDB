@@ -8,11 +8,13 @@ class YearMovieUiMapper @Inject constructor(
     private val movieUiMapper: MovieUiMapper
 ) {
 
-    fun map(yearMovie: YearMovie): YearMovieUiModel {
+    fun map(yearMovie: YearMovie, watchlist: List<Long>): YearMovieUiModel {
 
         return YearMovieUiModel(
             year = yearMovie.year,
-            movies = yearMovie.movies.map(movieUiMapper::map)
+            movies = yearMovie.movies.map { movie ->
+                movieUiMapper.map(movie, watchlist)
+            }
         )
     }
 }

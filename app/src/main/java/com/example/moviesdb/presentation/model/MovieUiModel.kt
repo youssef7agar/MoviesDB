@@ -4,5 +4,7 @@ data class MovieUiModel(
     val id: Long,
     val title: String,
     val poster: String,
-    val year: String
+    val year: String,
+    val overview: String,
+    val inWatchlist: Boolean
 )
