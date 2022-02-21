@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/adapter_member.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/adapter_movie.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/adapter_movie_overview.xml" value="0.396875" />
+        <entry key="app/src/main/res/layout/adapter_year.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/adapter_year_movie.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/fragment_details.xml" value="0.396875" />
         <entry key="app/src/main/res/layout/fragment_movie_details.xml" value="0.396875" />

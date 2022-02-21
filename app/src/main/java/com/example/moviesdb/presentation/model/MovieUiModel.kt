@@ -7,4 +7,4 @@ data class MovieUiModel(
     val year: String,
     val overview: String,
     val inWatchlist: Boolean
-)
+) : MultiViewItem
