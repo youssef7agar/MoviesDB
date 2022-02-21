@@ -3,6 +3,7 @@ package com.example.moviesdb.remote.model
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailsRemote (
+    @SerializedName("id") val id: Long?,
     @SerializedName("title") val title: String?,
     @SerializedName("backdrop_path") val backImage: String?,
     @SerializedName("overview") val overview: String?,

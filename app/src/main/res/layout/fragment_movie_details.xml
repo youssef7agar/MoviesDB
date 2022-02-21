@@ -78,10 +78,21 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/watchListButton"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/statusTextView"
                     tools:text="Revenue: 100M" />
+
+                <Button
+                    android:id="@+id/watchListButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    tools:text="Add to watchlist"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/revenueTextView"
+                    app:layout_constraintTop_toBottomOf="@id/releaseDateTextView" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/detailsGroup"
@@ -213,7 +224,7 @@
                     android:text="@string/directors"
                     android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/actorsRecyclerView"/>
+                    app:layout_constraintTop_toBottomOf="@id/actorsRecyclerView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/directorsRecyclerView"
@@ -230,7 +241,7 @@
                     android:id="@+id/creditsGroup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="actorsRecyclerView, directorsRecyclerView"/>
+                    app:constraint_referenced_ids="actorsRecyclerView, directorsRecyclerView" />
 
                 <ProgressBar
                     android:id="@+id/creditsLoadingProgressBar"

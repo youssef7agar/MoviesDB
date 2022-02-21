@@ -3,7 +3,8 @@ package com.example.moviesdb.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.moviesdb.domain.model.Member
+import com.example.moviesdb.common.Preferences
+import com.example.moviesdb.domain.model.MovieDetails
 import com.example.moviesdb.domain.usecase.GetCreditsUseCase
 import com.example.moviesdb.domain.usecase.GetMovieDetailsUseCase
 import com.example.moviesdb.domain.usecase.GetSimilarMoviesUseCase
@@ -27,7 +28,8 @@ class MovieDetailsViewModel @Inject constructor(
     private val getCreditsUseCase: GetCreditsUseCase,
     private val movieDetailsUiMapper: MovieDetailsUiMapper,
     private val movieUiMapper: MovieUiMapper,
-    private val memberUiMapper: MemberUiMapper
+    private val memberUiMapper: MemberUiMapper,
+    private val preferences: Preferences
 ) : ViewModel(), CoroutineScope {
 
     private val job = SupervisorJob()
@@ -47,6 +49,10 @@ class MovieDetailsViewModel @Inject constructor(
         get() = _creditsViewState
 
     private lateinit var similarIds: List<Long>
+    private lateinit var currentMovieDetails: MovieDetails
+
+    private val watchlist: MutableList<Long>
+        get() = preferences.getWatchList().map { it.toLong() }.toMutableList()
 
     init {
         DetailsViewState.Loading.also(_detailsViewState::setValue)
@@ -59,7 +65,15 @@ class MovieDetailsViewModel @Inject constructor(
 
         when (val result = getMovieDetailsUseCase(movieId)) {
             is GetMovieDetailsUseCase.Result.Success -> {
-                _detailsViewState.postValue(DetailsViewState.Success(movieDetailsUiMapper.map(result.movieDetails)))
+                currentMovieDetails = result.movieDetails
+                _detailsViewState.postValue(
+                    DetailsViewState.Success(
+                        movieDetailsUiMapper.map(
+                            currentMovieDetails,
+                            watchlist
+                        )
+                    )
+                )
             }
             is GetMovieDetailsUseCase.Result.Error -> {
                 _detailsViewState.postValue(DetailsViewState.Error)
@@ -106,5 +120,23 @@ class MovieDetailsViewModel @Inject constructor(
                 Timber.w("Something went wrong when loading the credits: ${result.throwable}")
             }
         }
+    }
+
+    fun watchList() {
+        if (watchlist.contains(currentMovieDetails.id)) {
+            val newList = watchlist.also { it.remove(currentMovieDetails.id) }
+            preferences.addWatchList(newList.map { it.toString() })
+        } else {
+            val newList = watchlist.also { it.add(currentMovieDetails.id) }
+            preferences.addWatchList(newList.map { it.toString() })
+        }
+        _detailsViewState.postValue(
+            DetailsViewState.Success(
+                movieDetailsUiMapper.map(
+                    currentMovieDetails,
+                    watchlist
+                )
+            )
+        )
     }
 }

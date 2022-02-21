@@ -20,5 +20,7 @@ class Constants {
         const val BASE_IMAGE_URL = "https://image.tmdb.org/t/p/w500"
 
         const val PAGINATION_START = 1
+
+        const val WATCHLIST = "watchlist"
     }
 }

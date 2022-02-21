@@ -68,6 +68,8 @@ class MovieDetailsFragment : Fragment() {
         handleDetailsViewState()
         handleSimilarMoviesViewState()
         handleCreditsViewState()
+
+        binding.watchListButton.setOnClickListener { viewModel.watchList() }
     }
 
     private fun handleDetailsViewState() {
@@ -112,6 +114,10 @@ class MovieDetailsFragment : Fragment() {
                         getString(R.string.revenue),
                         viewState.movieDetails.revenue
                     )
+
+                    binding.watchListButton.text =
+                        if (viewState.movieDetails.inWatchlist) getString(R.string.remove_from_watchlist)
+                        else getString(R.string.add_to_watchlist)
                 }
             }
         }

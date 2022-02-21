@@ -11,6 +11,7 @@ class MovieDetailsMapper @Inject constructor() {
         assertEssentialParams(remote)
 
         return MovieDetails(
+            id = remote.id!!,
             title = remote.title!!,
             backImage = BASE_IMAGE_URL + remote.backImage,
             overview = remote.overview ?: "",
@@ -23,6 +24,9 @@ class MovieDetailsMapper @Inject constructor() {
 
     private fun assertEssentialParams(movieRemote: MovieDetailsRemote) {
         when {
+            movieRemote.id == null -> {
+                throw RuntimeException("The params: movieRemote.id is missing in received object: $movieRemote")
+            }
             movieRemote.title == null -> {
                 throw RuntimeException("The params: movieRemote.title is missing in received object: $movieRemote")
             }
