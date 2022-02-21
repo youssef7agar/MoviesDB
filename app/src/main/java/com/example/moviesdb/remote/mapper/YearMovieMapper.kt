@@ -26,7 +26,8 @@ class YearMovieMapper @Inject constructor() {
             title = movieRemote.title!!,
             poster = BASE_IMAGE_URL + movieRemote.poster!!,
             id = movieRemote.id!!,
-            year = movieRemote.releaseDate!!.take(4)
+            year = movieRemote.releaseDate!!.take(4),
+            overview = movieRemote.overview ?: ""
         )
     }
 

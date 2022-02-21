@@ -7,5 +7,6 @@ class MovieDetailsUiModel(
     val releaseDate: String,
     val revenue: String,
     val status: String,
-    val tagline: String
+    val tagline: String,
+    val inWatchlist: Boolean
 )

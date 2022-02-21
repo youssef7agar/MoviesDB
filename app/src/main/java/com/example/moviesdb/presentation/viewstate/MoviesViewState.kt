@@ -1,6 +1,6 @@
 package com.example.moviesdb.presentation.viewstate
 
-import com.example.moviesdb.presentation.model.YearMovieUiModel
+import com.example.moviesdb.presentation.model.MultiViewItem
 
 sealed class MoviesViewState {
 
@@ -8,7 +8,7 @@ sealed class MoviesViewState {
 
     object NoInternet : MoviesViewState()
 
-    data class Success(val movies: List<YearMovieUiModel>, val loadingMore: Boolean = false) : MoviesViewState()
+    data class Success(val movies: List<MultiViewItem>, val loadingMore: Boolean = false) : MoviesViewState()
 
     object Error : MoviesViewState()
 }

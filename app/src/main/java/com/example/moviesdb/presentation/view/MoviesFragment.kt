@@ -13,14 +13,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.moviesdb.MyApplication
 import com.example.moviesdb.common.hideKeyboard
 import com.example.moviesdb.databinding.FragmentMoviesBinding
 import com.example.moviesdb.di.ViewModelProviderFactory
-import com.example.moviesdb.presentation.adapter.YearMoviesAdapter
+import com.example.moviesdb.presentation.adapter.MovieAdapter
 import com.example.moviesdb.presentation.viewmodel.MoviesViewModel
 import com.example.moviesdb.presentation.viewstate.MoviesViewEvent
 import com.example.moviesdb.presentation.viewstate.MoviesViewState
@@ -30,7 +30,7 @@ class MoviesFragment : Fragment() {
     private var _binding: FragmentMoviesBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: YearMoviesAdapter
+    private lateinit var adapter: MovieAdapter
     private var isScrolling = false
 
     @Inject
@@ -78,6 +78,9 @@ class MoviesFragment : Fragment() {
             requireActivity().hideKeyboard()
             viewModel.search(binding.searchEditText.text.toString())
         }
+
+        (binding.yearMoviesRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+            false
     }
 
     private fun handleViewState() {
@@ -136,7 +139,7 @@ class MoviesFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        adapter = YearMoviesAdapter { movieId ->
+        adapter = MovieAdapter { movieId ->
             val action =
                 MoviesFragmentDirections.toMovieDetailsAction(movieId)
             binding.root.findNavController().navigate(action)
@@ -173,5 +176,10 @@ class MoviesFragment : Fragment() {
                 isScrolling = true
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.resume()
     }
 }

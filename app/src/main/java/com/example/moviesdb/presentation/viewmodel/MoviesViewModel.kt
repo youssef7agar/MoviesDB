@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.moviesdb.common.Event
+import com.example.moviesdb.common.Preferences
 import com.example.moviesdb.domain.model.YearMovie
 import com.example.moviesdb.domain.usecase.GetPopularMoviesUseCase
 import com.example.moviesdb.domain.usecase.SearchMoviesUseCase
+import com.example.moviesdb.presentation.mapper.YearAndMovieUiMapper
 import com.example.moviesdb.presentation.mapper.YearMovieUiMapper
 import com.example.moviesdb.presentation.viewstate.MoviesViewEvent
 import com.example.moviesdb.presentation.viewstate.MoviesViewState
@@ -22,7 +24,8 @@ import kotlin.coroutines.CoroutineContext
 class MoviesViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val searchMoviesUseCase: SearchMoviesUseCase,
-    private val yearMovieUiMapper: YearMovieUiMapper
+    private val movieAndYearUiMapper: YearAndMovieUiMapper,
+    private val preferences: Preferences
 ) : ViewModel(), CoroutineScope {
 
     private val job = SupervisorJob()
@@ -39,6 +42,9 @@ class MoviesViewModel @Inject constructor(
 
     private var movies = mutableListOf<YearMovie>()
 
+    private val watchlist: MutableList<Long>
+        get() = preferences.getWatchList().map { it.toLong() }.toMutableList()
+
     init {
         MoviesViewState.Loading.also(_viewState::setValue)
         getPopularMovies()
@@ -49,10 +55,10 @@ class MoviesViewModel @Inject constructor(
         _viewState.postValue(MoviesViewState.Loading)
         when (val result = getPopularMoviesUseCase()) {
             is GetPopularMoviesUseCase.Result.Success -> {
-                updateMoviesList(newList = result.movieResult.results)
+                movies.addAll(result.movieResult.results)
                 _viewState.postValue(
                     MoviesViewState.Success(
-                        movies = movies.map(yearMovieUiMapper::map)
+                        movies = movieAndYearUiMapper.map(movies, watchlist)
                     )
                 )
             }
@@ -68,10 +74,10 @@ class MoviesViewModel @Inject constructor(
         _viewState.postValue((viewState.value as MoviesViewState.Success).copy(loadingMore = true))
         when (val result = getPopularMoviesUseCase.next()) {
             is GetPopularMoviesUseCase.Result.Success -> {
-                updateMoviesList(newList = result.movieResult.results)
+                movies.addAll(result.movieResult.results)
                 _viewState.postValue(
                     MoviesViewState.Success(
-                        movies = movies.map(yearMovieUiMapper::map)
+                        movies = movieAndYearUiMapper.map(movies, watchlist)
                     )
                 )
             }
@@ -88,10 +94,10 @@ class MoviesViewModel @Inject constructor(
             movies.clear()
             when (val result = searchMoviesUseCase(query)) {
                 is SearchMoviesUseCase.Result.Success -> {
-                    updateMoviesList(newList = result.movieResult.results)
+                    movies.addAll(result.movieResult.results)
                     _viewState.postValue(
                         MoviesViewState.Success(
-                            movies = movies.map(yearMovieUiMapper::map)
+                            movies = movieAndYearUiMapper.map(movies, watchlist)
                         )
                     )
                 }
@@ -122,6 +128,14 @@ class MoviesViewModel @Inject constructor(
 
     private fun yearsList(): List<String> {
         return movies.map { it.year }
+    }
+
+    fun resume() {
+        _viewState.postValue(
+            MoviesViewState.Success(
+                movies = movieAndYearUiMapper.map(movies, watchlist)
+            )
+        )
     }
 
     @CallSuper
